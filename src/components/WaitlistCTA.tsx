@@ -10,27 +10,51 @@ export default function WaitlistCTA() {
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
+    if (!email || loading) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, firstName }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.');
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section id="waitlist" className={styles.section}>
-      {/* Same animated gradient mesh as hero */}
       <div className={styles.meshBg} aria-hidden="true" />
       <div className={styles.gridOverlay} aria-hidden="true" />
 
       <div className={styles.inner}>
         <motion.h2
           className={styles.headline}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.7, ease }}
+          transition={{ delay: 0.1, duration: 0.7, ease }}
         >
           Your family deserves better than a WhatsApp folder.
         </motion.h2>
@@ -40,7 +64,7 @@ export default function WaitlistCTA() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
-          transition={{ delay: 0.1, duration: 0.7, ease }}
+          transition={{ delay: 0.2, duration: 0.7, ease }}
         >
           Join the waitlist. Free forever tier available at launch.
         </motion.p>
@@ -50,7 +74,7 @@ export default function WaitlistCTA() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
-          transition={{ delay: 0.2, duration: 0.7, ease }}
+          transition={{ delay: 0.3, duration: 0.7, ease }}
         >
           <AnimatePresence mode="wait">
             {submitted ? (
@@ -83,6 +107,7 @@ export default function WaitlistCTA() {
                     className={styles.input}
                     onFocus={() => setFocused('name')}
                     onBlur={() => setFocused(null)}
+                    disabled={loading}
                   />
                 </div>
                 <div
@@ -97,14 +122,31 @@ export default function WaitlistCTA() {
                     required
                     onFocus={() => setFocused('email')}
                     onBlur={() => setFocused(null)}
+                    disabled={loading}
                   />
                 </div>
-                <button type="submit" className={styles.submitBtn} data-hover>
-                  Secure My Spot
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  data-hover
+                  disabled={loading}
+                >
+                  {loading ? 'Saving…' : 'Secure My Spot'}
                 </button>
               </motion.form>
             )}
           </AnimatePresence>
+
+          {error && (
+            <motion.p
+              className={styles.errorMsg}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {error}
+            </motion.p>
+          )}
 
           <p className={styles.formNote}>
             No spam. No credit card. Unsubscribe anytime.
