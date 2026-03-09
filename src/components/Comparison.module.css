@@ -1,0 +1,128 @@
+.section {
+  background: #111118;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px;
+}
+
+.headline {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 56px;
+  line-height: 1.15;
+}
+
+.tableWrapper {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.scrollable {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 14px;
+  min-width: 600px;
+}
+
+.featureCol {
+  text-align: left;
+  padding: 14px 20px;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  width: 200px;
+}
+
+.colHeader {
+  text-align: center;
+  padding: 14px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.legaciHeader {
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--accent-gold);
+}
+
+.rowAlt {
+  background: var(--bg-card);
+}
+
+.rowPlain {
+  background: transparent;
+}
+
+.rowAlt:hover,
+.rowPlain:hover {
+  background: rgba(201, 168, 76, 0.04);
+}
+
+.featureCell {
+  padding: 14px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  border-right: 1px solid var(--border);
+}
+
+.dataCell {
+  text-align: center;
+  padding: 14px 20px;
+  font-size: 15px;
+}
+
+.legaciCell {
+  background: rgba(201, 168, 76, 0.04);
+}
+
+.yes {
+  color: var(--accent-gold);
+}
+
+.no {
+  color: #8A4040;
+}
+
+.partial {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.footnote {
+  margin-top: 16px;
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 80px 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 60px 20px;
+  }
+}

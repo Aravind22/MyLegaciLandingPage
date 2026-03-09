@@ -1,0 +1,77 @@
+.section {
+  background: #0A0A0F;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px;
+}
+
+.headline {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-primary);
+  max-width: 780px;
+  margin-bottom: 64px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 8px;
+  padding: 32px;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-left-color: #E8C97A;
+  box-shadow: 0 8px 40px rgba(201, 168, 76, 0.12);
+}
+
+.emoji {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.cardHeadline {
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.cardBody {
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 80px 24px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 60px 20px;
+  }
+}

@@ -1,0 +1,129 @@
+.section {
+  background: #0A0A0F;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px;
+}
+
+.headline {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  max-width: 700px;
+}
+
+.subheadline {
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 64px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: border-color 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.card:hover::before {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.08) inset;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.card:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardHeadline {
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.cardBody {
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.cardBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-gold);
+  font-family: var(--font-sans, 'DM Sans', sans-serif);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 4px;
+  padding: 6px 14px;
+  align-self: flex-start;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+
+.cardBadge:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.15);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 80px 24px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 60px 20px;
+  }
+}
