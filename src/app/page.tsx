@@ -10,10 +10,12 @@ import Pricing from "@/components/Pricing";
 import WaitlistCTA from "@/components/WaitlistCTA";
 import CustomCursor from "@/components/CustomCursor";
 import MobileStickyBar from "@/components/MobileStickyBar";
+import ParticleBackground from "@/components/ParticleBackground";
 
 export default function Home() {
   return (
     <>
+      <ParticleBackground />
       <CustomCursor />
       <Nav />
       <main>

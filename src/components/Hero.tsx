@@ -1,17 +1,49 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import styles from './Hero.module.css';
 
 export default function Hero() {
   const [scrolled, setScrolled] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const meshRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 100);
+    let lastY = 0;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      lastY = y;
+      setScrolled(y > 100);
+    };
+
+    const tick = () => {
+      const y = lastY;
+
+      // Background-only parallax at 0.1x — text never moves
+      if (meshRef.current) {
+        meshRef.current.style.transform = `translateY(${y * 0.1}px)`;
+      }
+
+      // Fade entire hero text container out between 0px and 300px scroll
+      if (contentRef.current) {
+        const opacity = Math.max(0, 1 - y / 300);
+        contentRef.current.style.opacity = String(opacity);
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const handleWaitlistClick = () => {
@@ -23,20 +55,15 @@ export default function Hero() {
 
   return (
     <section id="hero" className={styles.hero}>
-      {/* Animated gradient mesh background */}
-      <div className={styles.meshBg} aria-hidden="true" />
+      {/* Animated gradient mesh background — parallax only element */}
+      <div ref={meshRef} className={styles.meshBg} aria-hidden="true" />
       {/* Grid overlay */}
       <div className={styles.gridOverlay} aria-hidden="true" />
-      {/* Noise filter */}
-      <svg className={styles.noiseSvg} aria-hidden="true">
-        <filter id="noise">
-          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#noise)" opacity="0.03" />
-      </svg>
+      {/* Grain overlay */}
+      <div className={styles.grainOverlay} aria-hidden="true" />
 
-      <div className={styles.content}>
+      {/* Hero text container — fades on scroll, no transform */}
+      <div ref={contentRef} className={styles.content}>
         {/* Badge */}
         <motion.div
           className={styles.badge}
@@ -47,33 +74,35 @@ export default function Hero() {
           🔐 End-to-End Encrypted &nbsp;•&nbsp; Zero Knowledge Architecture
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          className={styles.headline}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.7, ease }}
-        >
-          Your family has no idea
-        </motion.h1>
-        <motion.h1
-          className={`${styles.headline} gold-text`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.7, ease }}
-        >
-          where your most important
-        </motion.h1>
-        <motion.h1
-          className={styles.headline}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.7, ease }}
-        >
-          documents are.
-        </motion.h1>
+        {/* Headline — completely static, no parallax */}
+        <div className={styles.headlineGroup}>
+          <motion.h1
+            className={styles.headline}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.7, ease }}
+          >
+            Your family has no idea
+          </motion.h1>
+          <motion.h1
+            className={`${styles.headline} gold-text`}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.7, ease }}
+          >
+            where your most important
+          </motion.h1>
+          <motion.h1
+            className={styles.headline}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.7, ease }}
+          >
+            documents are.
+          </motion.h1>
+        </div>
 
-        {/* Subheadline */}
+        {/* Subheadline — completely static, no parallax */}
         <motion.p
           className={styles.subheadline}
           initial={{ opacity: 0, y: 20 }}
@@ -114,12 +143,9 @@ export default function Hero() {
         animate={{ opacity: scrolled ? 0 : 1, y: scrolled ? 10 : 0 }}
         transition={{ duration: 0.4 }}
       >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-        >
+        <div className={styles.scrollChevron}>
           <ChevronDown size={24} color="var(--accent-gold)" />
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );

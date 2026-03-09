@@ -112,6 +112,23 @@ a {
 }
 
 /* ============================================================
+   Z-Index Layering
+   particle canvas  → z-index: 1  (fixed, behind everything)
+   hero text        → z-index: 10 (set in Hero.module.css)
+   content sections → z-index: 20 (above particle canvas)
+   navigation       → z-index: 100+ (set in Nav.module.css)
+   ============================================================ */
+
+/* All sections except the hero get explicit z-index so they render
+   above the fixed particle canvas (z-index: 1). The hero section
+   intentionally has no z-index so its children can individually
+   layer relative to the canvas (meshBg below, content above). */
+main > section:not(#hero) {
+  position: relative;
+  z-index: 20;
+}
+
+/* ============================================================
    Section Layout Defaults
    ============================================================ */
 
